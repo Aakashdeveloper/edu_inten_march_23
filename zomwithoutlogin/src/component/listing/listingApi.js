@@ -1,51 +1,44 @@
-import React,{Component} from 'react';
+import React,{useEffect, useState} from 'react';
 import axios from 'axios';
 import './listing.css';
+import {useParams} from 'react-router-dom';
 import ListingDisplay from './listingDisplay';
 import CuisineFilter from '../filters/cuisineFilter';
 import CostFilter from '../filters/costFilter';;
 
-const url = "https://zomatoajulypi.herokuapp.com/restaurant?mealtype_id="
+const url = "http://3.17.216.66:4000/restaurant?mealtype_id="
 
-class Listing extends Component {
+const Listing =() => {
+    let params = useParams()
+    const [restaurantList,setrestaurantList] = useState()
     
-    constructor(props){
-        super(props)
-
-        this.state={
-            restaurantList:''
-        }
+    const setDataPerFilter = (data) => {
+        setrestaurantList(data)
     }
 
-    setDataPerFilter = (data) => {
-        this.setState({restaurantList:data})
-    }
-
-    render(){
-        return(
-            <>
-                <div className="row">
-                    <div id="mainListing">
-                        <div id="filter">
-                            <center><h2>Filters</h2></center>
-                            <CuisineFilter mealId={this.props.match.params.mealId}
-                            restPerCuisine={(data)=>{this.setDataPerFilter(data)}}/>
-                            <CostFilter mealId={this.props.match.params.mealId}
-                            restPerCost={(data)=>{this.setDataPerFilter(data)}}/>
-                        </div>
-                        <ListingDisplay listData={this.state.restaurantList}/>
-                    </div>
-                </div>
-            </>
-        )
-    }
-
-    componentDidMount(){
-        let mealId = this.props.match.params.mealId;
+    useEffect(() => {
+        let mealId = params.mealId;
         sessionStorage.setItem('mealId',mealId)
         axios.get(`${url}${mealId}`)
-        .then((res) => this.setState({restaurantList:res.data}))
-    }
+        .then((res) => setrestaurantList(res.data))
+    },[])
+
+    return(
+        <>
+            <div className="row">
+                <div id="mainListing">
+                    <div id="filter">
+                        <center><h2>Filters</h2></center>
+                        <CuisineFilter mealId={params.mealId}
+                        restPerCuisine={(data)=>{setDataPerFilter(data)}}/>
+                        <CostFilter mealId={params.mealId}
+                        restPerCost={(data)=>{setDataPerFilter(data)}}/>
+                    </div>
+                    <ListingDisplay listData={restaurantList}/>
+                </div>
+            </div>
+        </>
+    )
 }
 
 export default Listing;

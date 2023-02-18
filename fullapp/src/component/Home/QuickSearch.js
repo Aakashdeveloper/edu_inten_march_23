@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import QuickDisplay from './QuickDisplay'
 
-const url = "http://3.17.216.66:4000/quicksearch"
+const url = "https://zomatoajulypi.herokuapp.com/quicksearch"
 class QuickSearch extends Component {
 
     constructor(){
