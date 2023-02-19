@@ -1,29 +1,21 @@
-import React,{Component} from 'react';
+import React,{useEffect,useState} from 'react';
 import axios from 'axios';
 import Display from './displayOrder';
 
 const placeOrder = "http://localhost:7600/orders";
-class ViewOder extends Component {
+const ViewOder = () => {
+    const [orders,setOrders] = useState()
 
-    constructor(props){
-        super(props)
+    useEffect(()=> {
+        axios.get(placeOrder).then((res) => {setOrders(res.data)})
+    },[])
 
-        this.state={
-            orders:''
-        }
-    }
 
-    render() {
-        return(
-           <>
-            <Display orderData={this.state.orders}/>
-           </>
-        )
-    }
-
-    componentDidMount(){
-        axios.get(placeOrder).then((res) => {this.setState({orders:res.data})})
-    }
+    return(
+        <>
+         <Display orderData={orders}/>
+        </>
+     )
 }
 
 export default ViewOder

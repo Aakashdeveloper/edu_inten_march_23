@@ -8,7 +8,7 @@ import {useParams} from 'react-router-dom';
 
 const url = "http://3.17.216.66:4000";
 
-const Details=() =>{
+const Details=(props) =>{
 
     let [details,setDetails] = useState([])
     let params = useParams()
@@ -22,7 +22,7 @@ const Details=() =>{
 
 
     const proceed = ()  => {
-        this.props.history.push(`/placeOrder/${details.restaurant_name}`)
+        props.history.push(`/placeOrder/${details.restaurant_name}`)
     }
 
     const renderData = (data) => {

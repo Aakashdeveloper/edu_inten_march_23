@@ -1,24 +1,26 @@
 {
   "orders": [
     {
-      "id": 44967,
-      "hotel_name": "AMA Cafe",
-      "name": "Vishali",
-      "email": "vishali@gmail.com",
-      "cost": 715,
-      "phone": 9876543212,
-      "address": "KY 34 sector 12",
-      "menuItem": "34,32,33"
+      "id": 61706,
+      "hotel_name": "Burger King",
+      "inputs": {
+        "name": "Ankita",
+        "email": "ankita@gmail.com",
+        "phone": "9876543211",
+        "address": "Hno 211 Nagpur"
+      },
+      "cost": 712
     },
     {
-      "id": 3164,
-      "hotel_name": "Captain Sam's",
-      "name": "Aakash",
-      "email": "aakash@gmail.com",
-      "cost": 477,
-      "phone": 9876543212,
-      "address": "KY 34 sector 12",
-      "menuItem": "26,28,29"
+      "id": 35040,
+      "hotel_name": "Cafe Wink",
+      "inputs": {
+        "name": "Nikita",
+        "email": "nikki@gmail.com",
+        "phone": "7876543211",
+        "address": "Hno 211 Delhi"
+      },
+      "cost": 712
     }
   ]
 }

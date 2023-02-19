@@ -9,9 +9,9 @@ const DisplayOrder = (props) => {
                     <tr key={item.id}>
                         <td>{item.id}</td>
                         <td>{item.hotel_name}</td>
-                        <td>{item.name}</td>
-                        <td>{item.phone}</td>
-                        <td>{item.email}</td>
+                        <td>{item.inputs.name}</td>
+                        <td>{item.inputs.phone}</td>
+                        <td>{item.inputs.email}</td>
                         <td>Rs. {item.cost}</td>
                         <td>{item.date}</td>
                         <td>{item.status}</td>

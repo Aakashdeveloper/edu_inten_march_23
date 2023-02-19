@@ -17,3 +17,10 @@
 (get) allorder>            
        
 (get) restaurants>         http://3.17.216.66:4000/restaurants
+
+
+///Dummy api
+> open cmd as admin
+> npm i -g json-server
+
+> json-server --watch orders.json --port 7600

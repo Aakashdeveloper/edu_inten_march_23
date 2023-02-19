@@ -1,32 +1,20 @@
-import React,{Component} from 'react';
+import React,{useState} from 'react';
 import './placeOrder.css';
+import {useParams} from 'react-router-dom';
+
+const PlaceOder = (props) =>  {
+    const placeUrl = "http://localhost:7600/orders"
+    let params = useParams()
+    const [id] = useState(Math.floor(Math.random()*100000));
+    const [hotel_name] = useState(params.restName)
+    const [inputs,setInputs] = useState({})
+    const [cost] = useState(712)
 
 
-const url = "http://zomatoajulypi.herokuapp.com/menuItem";
-const placeOrder = "http://localhost:7600/orders"
-
-class PlaceOder extends Component {
-
-    constructor(props){
-        super(props)
-
-        this.state={
-            id:Math.floor(Math.random()*100000),
-            hotel_name:this.props.match.params.restName,
-            name:'Vishali',
-            email:'vishali@gmail.com',
-            cost:0,
-            phone:9876543212,
-            address:'KY 34 sector 12',
-            menuItem:''
-        }
-    }
-
-    placeOrder = () => {
-        let obj = this.state;
-        obj.menuItem = sessionStorage.getItem('menu');
-        console.log(obj)
-        fetch(placeOrder,{
+    const placeOrder = () => {
+       
+        let obj = {id,hotel_name,inputs,cost}
+        fetch(placeUrl,{
             method:'POST',
             headers:{
                 'accept':'application/json',
@@ -34,104 +22,61 @@ class PlaceOder extends Component {
             },
             body:JSON.stringify(obj)
         })
-        .then(this.props.history.push('/viewBooking'))
+        .then(props.history.push('/viewBooking'))
     }
 
-    renderItem=(data) => {
-        if(data){
-            return data.map((item) => {
-                return(
-                    <div className="orderItem" key={item.menu_id}>
-                        <img src={item.menu_image} alt={item.menu_name}/>
-                        <h3>{item.menu_name}</h3>
-                        <h4>Rs. {item.menu_price}</h4>
-                    </div>
-                )
-            })
-        }
-    }
+    const handleChange = e => setInputs(prevState => (
+        { 
+            ...prevState, [e.target.name]: e.target.value 
+        } 
+    ));
 
-    handleChange=(event) => {
-        this.setState({[event.target.name]:event.target.value})
-    }
 
-    render() {
-        return(
-            <div className="container">
-                <div className="panel panel-primary">
-                    <div className="panel-heading">
-                        <h3>Your Order From Restaurants {this.state.hotel_name} </h3>
-                    </div>
-                    <div className="panel-body">
-                        <div className="row">
-                            <input type="hidden" name="cost" value={this.state.cost}/>
-                            <input type="hidden" name="id" value={this.state.id}/>
-                            <input type="hidden" name="hotel_name" value={this.state.hotel_name}/>
-                            <div className="form-group col-md-6">
-                                <label>Name</label>
-                                <input className="form-control" name='name'
-                                value={this.state.name} onChange={this.handleChange}/>
-                            </div>
-                            <div className="form-group col-md-6">
-                                <label>Email</label>
-                                <input className="form-control" name='email'
-                                value={this.state.email} onChange={this.handleChange}/>
-                            </div>
-                            <div className="form-group col-md-6">
-                                <label>Phone</label>
-                                <input className="form-control" name='phone'
-                                value={this.state.phone} onChange={this.handleChange}/>
-                            </div>
-                            <div className="form-group col-md-6">
-                                <label>Address</label>
-                                <input className="form-control" name='address'
-                                value={this.state.address} onChange={this.handleChange}/>
-                            </div>
+   
+    return(
+        <div className="container">
+            <div className="panel panel-primary">
+                <div className="panel-heading">
+                    <h3>Your Order From Restaurants {hotel_name} </h3>
+                </div>
+                <div className="panel-body">
+                    <div className="row">
+                        <input type="hidden" name="cost" value={cost}/>
+                        <input type="hidden" name="id" value={id}/>
+                        <input type="hidden" name="hotel_name" value={hotel_name}/>
+                        <div className="form-group col-md-6">
+                            <label>Name</label>
+                            <input className="form-control" name='name'
+                            value={inputs.name || 'Ankita'} onChange={handleChange}/>
                         </div>
-                        {this.renderItem(this.state.menuItem)}
-                        <div className="row">
-                            <div className="col-md-12">
-                                <h2>Total Price is Rs.{this.state.cost}</h2>
-                            </div>
+                        <div className="form-group col-md-6">
+                            <label>Email</label>
+                            <input className="form-control" name='email'
+                            value={inputs.email || 'ankita@gmail.com'} onChange={handleChange}/>
                         </div>
-                        <button className="btn btn-success" onClick={this.placeOrder}>
-                            Checkout
-                        </button>
+                        <div className="form-group col-md-6">
+                            <label>Phone</label>
+                            <input className="form-control" name='phone'
+                            value={inputs.phone || '9876543211'} onChange={handleChange}/>
+                        </div>
+                        <div className="form-group col-md-6">
+                            <label>Address</label>
+                            <input className="form-control" name='address'
+                            value={inputs.address || 'Hno 211 Nagpur'} onChange={handleChange}/>
+                        </div>
                     </div>
+                    <div className="row">
+                        <div className="col-md-12">
+                            <h2>Total Price is Rs.{cost}</h2>
+                        </div>
+                    </div>
+                    <button className="btn btn-success" onClick={placeOrder}>
+                        Checkout
+                    </button>
                 </div>
             </div>
-        )
-    }
-
-    //calling api  
-    componentDidMount(){
-        let menuItem = sessionStorage.getItem('menu');
-        let orderId = [];
-        console.log(orderId)
-        menuItem.split(',').map((item) => {
-            orderId.push(parseInt(item))
-            return 'ok'
-        })
-        fetch(url,{
-            method: 'POST',
-            headers:{
-                'accept':'application/json',
-                'content-type':'application/json'
-            },
-           
-            body:JSON.stringify(orderId)
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            console.log(">>>",data)
-            let totalPrice = 0;
-            data.map((item) => {
-                totalPrice = totalPrice+Number(item.menu_price)
-                return 'ok'
-            })
-            this.setState({menuItem:data,cost:totalPrice})
-        })
-    }
+        </div>
+    )
 }
 
 export default PlaceOder
