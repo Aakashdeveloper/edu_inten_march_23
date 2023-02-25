@@ -1,15 +1,60 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import './placeOrder.css';
 import {useParams} from 'react-router-dom';
 
 const PlaceOder = (props) =>  {
-    const placeUrl = "http://localhost:7600/orders"
+    const placeUrl = "http://localhost:7600/orders";
+    const url = "http://3.17.216.66:4000/menuItem";
     let params = useParams()
     const [id] = useState(Math.floor(Math.random()*100000));
     const [hotel_name] = useState(params.restName)
     const [inputs,setInputs] = useState({})
-    const [cost] = useState(712)
+    const [cost,setCost] = useState()
+    const [menu,setMenu] = useState()
 
+    useEffect(()=>{
+        let menuItem = sessionStorage.getItem('menu');
+        let orderId = [];
+        console.log(orderId)
+        menuItem.split(',').map((item) => {
+            orderId.push(parseInt(item))
+            return 'ok'
+        })
+        fetch(url,{
+            method: 'POST',
+            headers:{
+                'accept':'application/json',
+                'content-type':'application/json'
+            },
+           
+            body:JSON.stringify(orderId)
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(">>>",data)
+            let totalPrice = 0;
+            data.map((item) => {
+                totalPrice = totalPrice+Number(item.menu_price)
+                return 'ok'
+            })
+            setCost(totalPrice)
+            setMenu(data)
+        })
+    },[])
+
+    const renderItem=(data) => {
+        if(data){
+            return data.map((item) => {
+                return(
+                    <div className="orderItem" key={item.menu_id}>
+                        <img src={item.menu_image} alt={item.menu_name}/>
+                        <h3>{item.menu_name}</h3>
+                        <h4>Rs. {item.menu_price}</h4>
+                    </div>
+                )
+            })
+        }
+    }
 
     const placeOrder = () => {
        
@@ -65,6 +110,7 @@ const PlaceOder = (props) =>  {
                             value={inputs.address || 'Hno 211 Nagpur'} onChange={handleChange}/>
                         </div>
                     </div>
+                    {renderItem(menu)}
                     <div className="row">
                         <div className="col-md-12">
                             <h2>Total Price is Rs.{cost}</h2>
