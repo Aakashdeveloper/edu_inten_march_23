@@ -67,7 +67,8 @@ const PlaceOder = (props) =>  {
             },
             body:JSON.stringify(obj)
         })
-        .then(props.history.push('/viewBooking'))
+        .then(console.log('order added'))
+        // .then(props.history.push('/viewBooking'))
     }
 
     const handleChange = e => setInputs(prevState => (
@@ -85,40 +86,43 @@ const PlaceOder = (props) =>  {
                     <h3>Your Order From Restaurants {hotel_name} </h3>
                 </div>
                 <div className="panel-body">
-                    <div className="row">
-                        <input type="hidden" name="cost" value={cost}/>
-                        <input type="hidden" name="id" value={id}/>
-                        <input type="hidden" name="hotel_name" value={hotel_name}/>
-                        <div className="form-group col-md-6">
-                            <label>Name</label>
-                            <input className="form-control" name='name'
-                            value={inputs.name || 'Ankita'} onChange={handleChange}/>
+                    <form action="http://localhost:4100/paynow" method="POST">
+                        <div className="row">
+                            <input type="hidden" name="cost" value={cost}/>
+                            <input type="hidden" name="id" value={id}/>
+                            <input type="hidden" name="hotel_name" value={hotel_name}/>
+                            <div className="form-group col-md-6">
+                                <label>Name</label>
+                                <input className="form-control" name='name'
+                                value={inputs.name || 'Ankita'} onChange={handleChange}/>
+                            </div>
+                            <div className="form-group col-md-6">
+                                <label>Email</label>
+                                <input className="form-control" name='email'
+                                value={inputs.email || 'ankita@gmail.com'} onChange={handleChange}/>
+                            </div>
+                            <div className="form-group col-md-6">
+                                <label>Phone</label>
+                                <input className="form-control" name='phone'
+                                value={inputs.phone || '9876543211'} onChange={handleChange}/>
+                            </div>
+                            <div className="form-group col-md-6">
+                                <label>Address</label>
+                                <input className="form-control" name='address'
+                                value={inputs.address || 'Hno 211 Nagpur'} onChange={handleChange}/>
+                            </div>
                         </div>
-                        <div className="form-group col-md-6">
-                            <label>Email</label>
-                            <input className="form-control" name='email'
-                            value={inputs.email || 'ankita@gmail.com'} onChange={handleChange}/>
+                        {renderItem(menu)}
+                        <div className="row">
+                            <div className="col-md-12">
+                                <h2>Total Price is Rs.{cost}</h2>
+                            </div>
                         </div>
-                        <div className="form-group col-md-6">
-                            <label>Phone</label>
-                            <input className="form-control" name='phone'
-                            value={inputs.phone || '9876543211'} onChange={handleChange}/>
-                        </div>
-                        <div className="form-group col-md-6">
-                            <label>Address</label>
-                            <input className="form-control" name='address'
-                            value={inputs.address || 'Hno 211 Nagpur'} onChange={handleChange}/>
-                        </div>
-                    </div>
-                    {renderItem(menu)}
-                    <div className="row">
-                        <div className="col-md-12">
-                            <h2>Total Price is Rs.{cost}</h2>
-                        </div>
-                    </div>
-                    <button className="btn btn-success" onClick={placeOrder}>
-                        Checkout
-                    </button>
+                        <button className="btn btn-success" onClick={placeOrder}
+                        type="submit">
+                            Checkout
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

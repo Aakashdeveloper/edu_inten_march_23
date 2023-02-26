@@ -24,3 +24,7 @@
 > npm i -g json-server
 
 > json-server --watch orders.json --port 7600
+
+> npm run build
+///////////
+Render.com
